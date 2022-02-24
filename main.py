@@ -7,7 +7,7 @@ if __name__=='__main__':
     computer = AgentPlayer("computer",epsilon=0.3, gamma=0.9, symbol=1) 
     computer.loadPolicy("policy_agent")
 
-    random = RandomPlayer(name='humain', symbol=1)
+    opponent = HumanPlayer(name='humain', symbol=-1)
 
-    game = gameEnvironnement(computer, random)
+    game = gameEnvironnement(opponent, computer)
     game.playWithAnother()

@@ -115,6 +115,7 @@ class gameEnvironnement:
     return {'rounds': rounds, 'reward_player1':list_reward_player1, 'reward_player2':list_reward_player2}
 
   def playWithAnother(self, rounds=100):
+    self.showBoard()
     while not self.isOver:
       # Player 1 : Human
       positions = self.availablePositions()
