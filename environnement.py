@@ -4,13 +4,13 @@ from tqdm import tqdm
 class gameEnvironnement:
 
   def __init__(self, player1, player2):
-    self.board = np.zeros((3,3)) # initialisation of board
+    self.board = np.zeros((3,3)) # initialisation du tableau
     self.player1 = player1
     self.player2 = player2
     self.isOver = False
     self.boardHash = None
 
-    # We give the hand to the first player whose symbol is 1
+    # Le joueur dont le symbole est 1 commence à jouer
     self.playerSymbol = 1
 
   def game_over(self):
@@ -28,7 +28,7 @@ class gameEnvironnement:
         self.isOver = False
         return None
 
-  # Associate to each current board a unique hash
+  # Association d'un hachage unique pour chaque tableau
   def getHash(self):
     self.boardHash = str(self.board.reshape(3 * 3))
     return self.boardHash
@@ -38,10 +38,10 @@ class gameEnvironnement:
     return list(zip(*np.where(self.board==0)))
 
 
-  # Reward value to each state
+  # Les valeurs de la récompense pour chaque état
   def giveReward(self):
     result = self.game_over()
-    # backpropagate reward
+    # mise à jour des récompenses
     if result == 1:
         self.player1.update_qvalue(1)
         self.player2.update_qvalue(0)
@@ -52,7 +52,7 @@ class gameEnvironnement:
         self.player1.update_qvalue(0.1)
         self.player2.update_qvalue(0.5)
 
-  # board reset
+  # réinitialisation du tableau
   def reset(self):
     self.board = np.zeros((3, 3))
     self.boardHash = None
@@ -62,7 +62,7 @@ class gameEnvironnement:
   def updateState(self, position, playerSymbol):
     self.board[position] = playerSymbol
 
-  ## Train agent with agent Random
+  ## Entrainement de l'agent avec l'agent Random
   def TrainAgent(self, rounds=100):
 
     list_reward_player1 = [0]*rounds
@@ -70,14 +70,14 @@ class gameEnvironnement:
 
     for i in tqdm(range(rounds)):
       while not self.isOver:
-        # Player 1 play
+        # Le joueur 1 joue
         positions = self.availablePositions()
         p1_nextMove = self.player1.chooseNextBestAction(positions, self.board)
-        # take action and upate board state
+        # réalise une action et met à jour le tableau
         self.updateState(p1_nextMove, self.player1.symbol)
         board_hash = self.getHash()
         self.player1.addState(board_hash)
-        # check board status if it is end
+        # vérification du tableau, si complet le jeu est fini
 
         win = self.game_over()
 
@@ -92,7 +92,7 @@ class gameEnvironnement:
           self.reset()
           break
         else:
-          # Player 2 play
+          # Le joueur 2 joue
           positions = self.availablePositions()
           p2_nextMove = self.player2.chooseNextBestAction(positions, self.board)
           self.updateState(p2_nextMove, self.player2.symbol)
@@ -117,13 +117,13 @@ class gameEnvironnement:
   def playWithAnother(self, rounds=100):
     self.showBoard()
     while not self.isOver:
-      # Player 1 : Human
+      # Joueur 1 : Humain
       positions = self.availablePositions()
       p1_NextMove = self.player1.chooseNextBestAction(positions) 
       self.updateState(p1_NextMove, self.player1.symbol)
       self.showBoard()
 
-      # check board status if it is end
+      # vérification du tableau, si complet le jeu est fini
       win = self.game_over()
       if win is not None:
         # win == -1
@@ -134,7 +134,7 @@ class gameEnvironnement:
         self.reset()
         break
       else:
-        # Player 2 :  agent pretrained
+        # Joueur 2 :  agent entrainé
         positions = self.availablePositions()
         p2_NextMove = self.player2.chooseNextBestAction(positions, self.board)
         self.updateState(p2_NextMove, self.player2.symbol)
