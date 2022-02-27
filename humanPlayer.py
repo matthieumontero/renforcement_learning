@@ -1,4 +1,4 @@
-# class to specify Human player
+# classe pour spécifier un joueur humain
 class HumanPlayer:
     def __init__(self, name='humain', symbol=1):
         self.name = name

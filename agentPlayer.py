@@ -1,4 +1,4 @@
-## Class to create agent
+## Classe pour créerun agent
 import numpy as np
 import pickle 
 
@@ -17,7 +17,7 @@ class AgentPlayer:
       return boardHash
 
   def chooseNextBestAction(self, index_position, current_configuration):
-      # policy : epsilon greedy
+      # méthode : epsilon greedy
 
       # Exploration
       random = np.random.uniform(0,1)
@@ -25,7 +25,7 @@ class AgentPlayer:
           idx = np.random.choice(len(index_position))
           action = index_position[idx]
       else:
-          # Exploitation : choose available action which allow to obtain the max_value
+          # Exploitation : choisit l'action disponible amenant à la max_value
           value_max = -100000
           for p in index_position:
               next_config = current_configuration.copy()
@@ -38,11 +38,11 @@ class AgentPlayer:
                   action = p
       return action
 
-  # append a hash state
+  # ajoute un état hash
   def addState(self, state):
       self.states.append(state)
 
-  # update qvalue of state
+  # met à jour la qvalue de l'état
   def update_qvalue(self, reward):
       for state in reversed(self.states):
           if self.q_value.get(state) is None:

@@ -1,6 +1,6 @@
 import numpy as np
 
-# class to specify random player
+# classe pour spécifier un random player (joueur jouant aléatoirement)
 class RandomPlayer:
   def __init__(self,player_name='Random', gamma=0.9, alpha=0.2, symbol=-1):
     self.name = player_name
@@ -10,7 +10,7 @@ class RandomPlayer:
     self.q_value = {} 
     self.symbol = symbol
 
-  # create key for one configuration board
+  # crée une clé pour la configuration du tableau
   def getHash(self, board):
     boardHash = str(board.reshape(3*3))
     return boardHash
@@ -20,11 +20,11 @@ class RandomPlayer:
     action = index_position[idx]
     return action
 
-  # append a hash state
+  # ajoute un état hash
   def addState(self, state):
     self.states.append(state)
 
-  # update qvalue of state
+  # met à jour la qvalue de l'état
   def update_qvalue(self, reward):
     for state in reversed(self.states):
       if self.q_value.get(state) is None:
